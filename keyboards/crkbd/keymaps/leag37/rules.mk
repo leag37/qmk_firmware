@@ -2,3 +2,10 @@
 KEY_OVERRIDE_ENABLE = yes
 COMBO_ENABLE = yes
 VPATH += keyboards/gboards
+
+# RGB
+RGBLIGHT_ENABLE = no
+RGB_MATRIX_ENABLE = yes
+
+# Debug
+#CONSOLE_ENABLE = yes

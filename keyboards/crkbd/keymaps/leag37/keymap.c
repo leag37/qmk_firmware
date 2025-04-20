@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include "print.h"
+#include <inttypes.h>
+
 #include QMK_KEYBOARD_H
 #if __has_include("keymap.h")
 #    include "keymap.h"
@@ -6,19 +10,25 @@
 enum ELayers {
     BASE_QWERTY     = 0,
     BASE_COLEMAK_DH = 1,
-    NUMBER          = 2,
-    FUNC            = 3,
-    NAV             = 4,
-    SYMBOL          = 5,
-    MOUSE           = 6,
-    MEDIA           = 7,
-    FPS             = 8,
+    FPS             = 2,
+    NUMBER          = 3,
+    FUNC            = 4,
+    NAV             = 5,
+    SYMBOL          = 6,
+    MOUSE           = 7,
+    MEDIA           = 8,
+    SYSTEM          = 9,
 };
 
 // Define layers above this so that we can benefit from enum values
 #if __has_include("g/keymap_combo.h")
 #    include "g/keymap_combo.h"
 #endif
+
+// Macro commands
+enum ECustomKeycodes {
+    GH_TDL = SAFE_RANGE, // Toggle Default Layer
+};
 
 /* THIS FILE WAS GENERATED!
  *
@@ -30,9 +40,9 @@ enum ELayers {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [BASE_QWERTY] = LAYOUT_split_3x6_3_ex2(
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_LCBR,         KC_Q,            KC_W,            KC_E,            KC_R,            KC_T,            KC_NO,              KC_NO,           KC_Y,            KC_U,            KC_I,            KC_O,            KC_P,            KC_RCBR,
+        KC_LCBR,         KC_Q,            KC_W,            KC_E,            KC_R,            KC_T,            KC_TRNS,              KC_TRNS,           KC_Y,            KC_U,            KC_I,            KC_O,            KC_P,            KC_RCBR,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_LPRN,        LGUI_T(KC_A),    LALT_T(KC_S),     LCTL_T(KC_D),   LSFT_T(KC_F),    KC_G,            KC_NO,              KC_NO,           KC_H,            RSFT_T(KC_J),    RCTL_T(KC_K),     RALT_T(KC_L),    RGUI_T(KC_QUOT), KC_RPRN,
+        KC_LPRN,        LGUI_T(KC_A),    LALT_T(KC_S),     LCTL_T(KC_D),   LSFT_T(KC_F),    KC_G,            KC_TRNS,              KC_TRNS,           KC_H,            RSFT_T(KC_J),    RCTL_T(KC_K),     RALT_T(KC_L),    RGUI_T(KC_QUOT), KC_RPRN,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
         KC_LT,          KC_Z,            KC_X,            KC_C,            KC_V,            KC_B,                                                 KC_N,            KC_M,            KC_COMM,         KC_DOT,          KC_UNDS,         KC_GT,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
@@ -42,32 +52,92 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [BASE_COLEMAK_DH] = LAYOUT_split_3x6_3_ex2(
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_LCBR,         KC_Q,            KC_W,            KC_F,            KC_P,            KC_B,            KC_NO,              KC_NO,           KC_J,            KC_L,            KC_U,            KC_Y,            KC_QUOT,        KC_RCBR,
+        KC_LCBR,         KC_Q,            KC_W,            KC_F,            KC_P,            KC_B,            KC_TRNS,              KC_TRNS,           KC_J,            KC_L,            KC_U,            KC_Y,            KC_QUOT,        KC_RCBR,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_LPRN,        LGUI_T(KC_A),    LALT_T(KC_R),     LCTL_T(KC_S),   LSFT_T(KC_T),    KC_G,            KC_NO,              KC_NO,           KC_M,            RSFT_T(KC_N),    RCTL_T(KC_E),     RALT_T(KC_I),    RGUI_T(KC_O),   KC_RPRN,
+        KC_LPRN,        LGUI_T(KC_A),    LALT_T(KC_R),     LCTL_T(KC_S),   LSFT_T(KC_T),    KC_G,            KC_TRNS,              KC_TRNS,           KC_M,            RSFT_T(KC_N),    RCTL_T(KC_E),     RALT_T(KC_I),    RGUI_T(KC_O),   KC_RPRN,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
         KC_LT,          KC_Z,            KC_X,            KC_C,            KC_D,            KC_V,                                                 KC_K,            KC_H,            KC_COMM,         KC_DOT,          KC_UNDS,         KC_GT,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
                                                                           LT(MEDIA,KC_TAB), LT(NAV,KC_ESC),  LT(MOUSE,KC_SPC),   LT(SYMBOL,KC_ENT),LT(NUMBER,KC_BSPC),LT(FUNC,KC_DEL)
                                                                       //'----------------------------------------------------'  '----------------------------------------------------'
     ),
-[NUMBER] = LAYOUT_split_3x6_3_ex2(//  KC_PSLS, KC_1, KC_2, KC_3, KC_PMNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO),
+[NUMBER] = LAYOUT_split_3x6_3_ex2(
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_NO,          KC_PAST,         KC_7,            KC_8,            KC_9,            KC_PLUS,         KC_NO,              KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,
+        KC_TRNS,          KC_PAST,         KC_7,            KC_8,            KC_9,            KC_PLUS,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_NO,          KC_0,            KC_4,            KC_5,            KC_6,            KC_PEQL,         KC_NO,              KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,
+        KC_TRNS,          KC_0,            KC_4,            KC_5,            KC_6,            KC_PEQL,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_NO,          KC_PSLS,         KC_1,            KC_2,            KC_3,            KC_PMNS,                                              KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,
+        KC_TRNS,          KC_PSLS,         KC_1,            KC_2,            KC_3,            KC_PMNS,                                              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-                                                                           KC_TAB,          KC_ESC,          KC_SPC,             KC_NO,           KC_NO,           KC_NO
+                                                                           KC_TAB,          KC_ESC,          KC_SPC,             KC_TRNS,           KC_TRNS,           KC_TRNS
                                                                       //'----------------------------------------------------'  '----------------------------------------------------'
     ),
-[FUNC] = LAYOUT_split_3x6_3_ex2(KC_NO, KC_F12, KC_F7, KC_F8, KC_F9, KC_PSCR, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_F11, KC_F4, KC_F5, KC_F6, KC_SCRL, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_F10, KC_F1, KC_F2, KC_F3, KC_PAUS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO),
-[NAV] = LAYOUT_split_3x6_3_ex2(KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_CAPS, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_INS, KC_HOME, KC_PGDN, KC_PGUP, KC_END, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO),
-[SYMBOL] = LAYOUT_split_3x6_3_ex2(KC_NO, KC_GRV, KC_AMPR, KC_ASTR, KC_LPRN, KC_PLUS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_QUES, KC_DLR, KC_PERC, KC_CIRC, KC_PEQL, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_PSLS, KC_EXLM, KC_AT, KC_HASH, KC_PMNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO),
-[MOUSE] = LAYOUT_split_3x6_3_ex2(KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, MS_LEFT, MS_DOWN, MS_UP, MS_RGHT, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, MS_WHLL, MS_WHLD, MS_WHLU, MS_WHLR, KC_NO, KC_NO, KC_NO, KC_NO, MS_BTN1, MS_BTN2, MS_BTN3),
-[MEDIA] = LAYOUT_split_3x6_3_ex2(KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_MPLY, KC_MSTP, KC_MUTE),
-[FPS] = LAYOUT_split_3x6_3_ex2(KC_ESC, KC_T, KC_Q, KC_W, KC_E, KC_R, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_TAB, KC_G, KC_A, KC_S, KC_D, KC_F, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_LALT, KC_B, KC_Z, KC_X, KC_C, KC_V, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_LCTL, KC_LSFT, KC_SPC, KC_NO, KC_NO, KC_NO)
+[FUNC] = LAYOUT_split_3x6_3_ex2(
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+        KC_TRNS,          KC_F12,          KC_F7,           KC_F8,           KC_F9,           KC_PSCR,         KC_TRNS,              KC_TRNS,           GH_TDL,          KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+        KC_TRNS,          KC_F11,          KC_F4,           KC_F5,           KC_F6,           KC_SCRL,         KC_TRNS,              KC_TRNS,           TG(FPS),         KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+        KC_TRNS,          KC_F10,          KC_F1,           KC_F2,           KC_F3,           KC_PAUS,                                              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+                                                                           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS
+                                                                      //'----------------------------------------------------'  '----------------------------------------------------'
+    ),
+[NAV] = LAYOUT_split_3x6_3_ex2(
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+        KC_TRNS,          KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+        KC_TRNS,          KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_CAPS,         KC_LEFT,         KC_DOWN,         KC_UP,           KC_RIGHT,        KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+        KC_TRNS,          KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,                                                KC_INS,          KC_HOME,         KC_PGDN,         KC_PGUP,         KC_END,          KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+                                                                           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS
+                                                                      //'----------------------------------------------------'  '----------------------------------------------------'
+    ),
+[SYMBOL] = LAYOUT_split_3x6_3_ex2(
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,           KC_GRV,          KC_AMPR,         KC_ASTR,         KC_LPRN,         KC_PLUS,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,           KC_QUES,         KC_DLR,          KC_PERC,         KC_CIRC,         KC_PEQL,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,           KC_PSLS,         KC_EXLM,         KC_AT,           KC_HASH,         KC_PMNS,                                              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+                                                                           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS
+                                                                      //'----------------------------------------------------'  '----------------------------------------------------'
+   ),
+[MOUSE] = LAYOUT_split_3x6_3_ex2(
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           MS_LEFT,         MS_DOWN,         MS_UP,           MS_RGHT,         KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,                                                MS_WHLL,         MS_WHLD,         MS_WHLU,         MS_WHLR,         KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+                                                                           KC_TRNS,           KC_TRNS,           KC_TRNS,              MS_BTN1,         MS_BTN2,         MS_BTN3
+                                                                      //'----------------------------------------------------'  '----------------------------------------------------'
+    ),
+[SYSTEM] = LAYOUT_split_3x6_3_ex2(
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           RM_SPDU,         RM_HUEU,         RM_SATU,         RM_VALU,         KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           RM_PREV,         RM_NEXT,         RM_TOGG,         KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,                                                RM_SPDD,         RM_HUED,         RM_SATD,         RM_VALD,         KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+                                                                           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS
+                                                                      //'----------------------------------------------------'  '----------------------------------------------------'
+    ),
+[FPS] = LAYOUT_split_3x6_3_ex2(
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_ESC,          KC_T,            KC_Q,            KC_W,            KC_E,            KC_R,            KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TAB,          KC_G,            KC_A,            KC_S,            KC_D,            KC_F,            KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_LALT,         KC_B,            KC_Z,            KC_X,            KC_C,            KC_V,                                                 KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+                                                                           KC_LCTL,         KC_LSFT,         KC_SPC,             KC_TRNS,           KC_TRNS,           KC_TRNS
+                                                                      //'----------------------------------------------------'  '----------------------------------------------------'
+    )
 };
 // clang-format on
 
@@ -80,15 +150,6 @@ const key_override_t unds_override   = ko_make_basic(MOD_MASK_SHIFT, KC_UNDS, KC
 
 const key_override_t *key_overrides[] = {&lparen_override, &rparen_override, &comma_override, &period_override, &unds_override};
 
-// // Key combos
-// enum _combos { QW_TILDE };
-//
-// const uint16_t PROGMEM ab_combo[] = {KC_A, KC_B, COMBO_END};
-//
-// combo_t key_combos[] = {
-//     [QW_TILDE] = COMBO(ab_combo, KC_ESC),
-// };
-
 // Chordal hold handedness
 // clang-format off
 const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
@@ -99,6 +160,83 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
                             'L', 'L', 'L',  'R', 'R', 'R'
     );
 // clang-format on
+
+// RGB configuration
+layer_state_t layer_state_set_user(layer_state_t state) {
+    // uint8_t layer = get_highest_layer(state);
+    // uprintf("Highest Layer: %" PRIu8 " Is FPS On: %s", layer, layer_state_is(FPS) ? "true" : "false");
+    if (layer_state_is(FPS)) {
+        // Turn on different RGB mode and color for the gaming layer
+        rgb_matrix_mode(RGB_MATRIX_CYCLE_OUT_IN);
+    } else {
+        // Otherwise, only highlight this key if we have a valid key on this layer, not including
+        // keys from other layers
+        rgb_matrix_mode(RGB_MATRIX_SOLID_REACTIVE);
+    }
+
+    return state;
+}
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    uint8_t layer = get_highest_layer(layer_state);
+    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+        for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+            uint8_t index = g_led_config.matrix_co[row][col];
+            if (index >= led_min && index < led_max) {
+                if (host_keyboard_led_state().caps_lock && g_led_config.flags[index] & LED_FLAG_KEYLIGHT) {
+                    // If we have caps lock enabled, highlight white for this layer
+                    rgb_matrix_set_color(index, RGB_GREEN);
+                } else if (index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
+                    if (layer == FPS) {
+                        rgb_matrix_set_color(index, RGB_RED);
+                    } else {
+                        // Otherwise, only highlight this key if we have a valid key on this layer, not including
+                        // keys from other layers
+                        rgb_matrix_set_color(index, RGB_BLUE);
+                    }
+                } else if (layer == FPS) {
+                    // Turn on different RGB mode and color for the gaming layer
+                    rgb_matrix_set_color(index, RGB_RED);
+                } else {
+                    // No color
+                    rgb_matrix_set_color(index, RGB_OFF);
+                }
+            }
+        }
+    }
+    return false;
+}
+
+// Initialize the keyboard to be rgb blue
+void keyboard_post_init_user(void) {
+    // rgb_matrix_sethsv(170, 255, 255);
+    // rgb_matrix_mode(RGB_MATRIX_SOLID_REACTIVE);
+
+#ifdef CONSOLE_ENABLE
+    // debug_enable = true;
+    // debug_matrix = true;
+#endif
+}
+
+// Callback for key actions to handle custom keycodes
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case GH_TDL: {
+            if (record->event.pressed) {
+                if (layer_state_is(BASE_QWERTY)) {
+                    default_layer_set(BASE_COLEMAK_DH);
+                } else if (layer_state_is(BASE_COLEMAK_DH)) {
+                    default_layer_set(BASE_QWERTY);
+                }
+            }
+        } break;
+    };
+
+#ifdef CONSOLE_ENABLE
+    uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+#endif
+
+    return true;
+}
 
 #ifdef OTHER_KEYMAP_C
 #    include OTHER_KEYMAP_C
