@@ -40,7 +40,7 @@ enum ECustomKeycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [BASE_QWERTY] = LAYOUT_split_3x6_3_ex2(
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_LCBR,         KC_Q,            KC_W,            KC_E,            KC_R,            KC_T,            KC_TRNS,              KC_TRNS,           KC_Y,            KC_U,            KC_I,            KC_O,            KC_P,            KC_RCBR,
+        KC_LCBR,        KC_Q,            KC_W,            KC_E,            KC_R,            KC_T,            KC_TRNS,              KC_TRNS,           KC_Y,            KC_U,            KC_I,            KC_O,            KC_P,            KC_RCBR,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
         KC_LPRN,        LGUI_T(KC_A),    LALT_T(KC_S),     LCTL_T(KC_D),   LSFT_T(KC_F),    KC_G,            KC_TRNS,              KC_TRNS,           KC_H,            RSFT_T(KC_J),    RCTL_T(KC_K),     RALT_T(KC_L),    RGUI_T(KC_QUOT), KC_RPRN,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
@@ -236,6 +236,58 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #endif
 
     return true;
+}
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_F):
+        case RSFT_T(KC_J):
+        case LSFT_T(KC_T):
+        case RSFT_T(KC_N):
+            return 125;
+
+        default:
+            return TAPPING_TERM;
+    }
+}
+
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_F):
+        case RSFT_T(KC_J):
+        case LSFT_T(KC_T):
+        case RSFT_T(KC_N):
+            return 125;
+
+        default:
+            return QUICK_TAP_TERM;
+    }
+}
+
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LGUI_T(KC_A):
+        case RGUI_T(KC_QUOT):
+            return false;
+
+        default:
+            return true;
+    }
+}
+
+bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record, uint16_t other_keycode, keyrecord_t *other_record) {
+    switch (tap_hold_keycode) {
+        // GUI keys should always resolve as taps unless the tap term elapses
+        case LGUI_T(KC_A):
+        case RGUI_T(KC_QUOT):
+            if (other_record->event.time - tap_hold_record->event.time < TAPPING_TERM) {
+                return false;
+            }
+
+        default:
+            break;
+    }
+    return get_chordal_hold_default(tap_hold_record, other_record);
 }
 
 #ifdef OTHER_KEYMAP_C
