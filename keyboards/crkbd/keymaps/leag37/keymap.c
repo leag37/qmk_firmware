@@ -7,6 +7,7 @@
 #    include "keymap.h"
 #endif
 
+// If you change these, remember to update the tri layer mapping in config.h
 enum ELayers {
     BASE_QWERTY     = 0,
     BASE_COLEMAK_DH = 1,
@@ -28,6 +29,8 @@ enum ELayers {
 // Macro commands
 enum ECustomKeycodes {
     GH_TDL = SAFE_RANGE, // Toggle Default Layer
+    GH_QWTY,
+    GH_COLE
 };
 
 /* THIS FILE WAS GENERATED!
@@ -74,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 [FUNC] = LAYOUT_split_3x6_3_ex2(
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_TRNS,          KC_F12,          KC_F7,           KC_F8,           KC_F9,           KC_PSCR,         KC_TRNS,              KC_TRNS,           GH_TDL,          KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+        KC_TRNS,          KC_F12,          KC_F7,           KC_F8,           KC_F9,           KC_PSCR,         KC_TRNS,              KC_TRNS,           GH_TDL,          GH_QWTY,           GH_COLE,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
         KC_TRNS,          KC_F11,          KC_F4,           KC_F5,           KC_F6,           KC_SCRL,         KC_TRNS,              KC_TRNS,           TG(FPS),         KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
@@ -114,6 +117,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,                                                MS_WHLL,         MS_WHLD,         MS_WHLU,         MS_WHLR,         KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
                                                                            KC_TRNS,           KC_TRNS,           KC_TRNS,              MS_BTN1,         MS_BTN2,         MS_BTN3
+                                                                      //'----------------------------------------------------'  '----------------------------------------------------'
+    ),
+[MEDIA] = LAYOUT_split_3x6_3_ex2(
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,            KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,            KC_TRNS,         KC_MPRV,         KC_VOLD,         KC_VOLU,         KC_MNXT,         KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+       KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,                                              KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,           KC_TRNS,
+    //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
+                                                                           KC_TRNS,         KC_TRNS,         KC_TRNS,            KC_MPLY,         KC_MSTP,         KC_MUTE
                                                                       //'----------------------------------------------------'  '----------------------------------------------------'
     ),
 [SYSTEM] = LAYOUT_split_3x6_3_ex2(
@@ -186,12 +200,50 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                     // If we have caps lock enabled, highlight white for this layer
                     rgb_matrix_set_color(index, RGB_GREEN);
                 } else if (index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
-                    if (layer == FPS) {
-                        rgb_matrix_set_color(index, RGB_RED);
-                    } else {
-                        // Otherwise, only highlight this key if we have a valid key on this layer, not including
-                        // keys from other layers
-                        rgb_matrix_set_color(index, RGB_BLUE);
+                    switch (layer) {
+                        case BASE_QWERTY:
+                            rgb_matrix_set_color(index, RGB_BLUE);
+                            break;
+
+                        case BASE_COLEMAK_DH:
+                            rgb_matrix_set_color(index, RGB_PURPLE);
+                            break;
+
+                        case FPS:
+                            rgb_matrix_set_color(index, RGB_RED);
+                            break;
+
+                        case NUMBER:
+                            rgb_matrix_set_color(index, RGB_ORANGE);
+                            break;
+
+                        case FUNC:
+                            rgb_matrix_set_color(index, RGB_CYAN);
+                            break;
+
+                        case NAV:
+                            rgb_matrix_set_color(index, RGB_MAGENTA);
+                            break;
+
+                        case SYMBOL:
+                            rgb_matrix_set_color(index, RGB_CHARTREUSE);
+                            break;
+
+                        case MOUSE:
+                            rgb_matrix_set_color(index, RGB_PINK);
+                            break;
+
+                        case MEDIA:
+                            rgb_matrix_set_color(index, RGB_GOLD);
+                            break;
+
+                        case SYSTEM:
+                            rgb_matrix_set_color(index, RGB_CORAL);
+                            break;
+
+                        default:
+                            rgb_matrix_set_color(index, RGB_WHITE);
+                            break;
                     }
                 } else if (layer == FPS) {
                     // Turn on different RGB mode and color for the gaming layer
@@ -222,14 +274,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case GH_TDL: {
             if (record->event.pressed) {
-                if (layer_state_is(BASE_QWERTY)) {
-                    default_layer_set(BASE_COLEMAK_DH);
-                } else if (layer_state_is(BASE_COLEMAK_DH)) {
-                    default_layer_set(BASE_QWERTY);
-                }
+                default_layer_xor(BASE_QWERTY | BASE_COLEMAK_DH);
             }
-        } break;
-    };
+            return false;
+        }
+
+        case GH_QWTY: {
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(BASE_QWERTY);
+            }
+            return false;
+        }
+
+        case GH_COLE: {
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(BASE_COLEMAK_DH);
+            }
+            return false;
+        }
+    }
 
 #ifdef CONSOLE_ENABLE
     uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
