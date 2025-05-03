@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdlib.h>
 #include "print.h"
 #include <inttypes.h>
@@ -5,6 +6,10 @@
 #include QMK_KEYBOARD_H
 #if __has_include("keymap.h")
 #    include "keymap.h"
+#endif
+
+#if __has_include("transactions.h")
+#    include "transactions.h"
 #endif
 
 // If you change these, remember to update the tri layer mapping in config.h
@@ -77,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 [FUNC] = LAYOUT_split_3x6_3_ex2(
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_TRNS,          KC_F12,          KC_F7,           KC_F8,           KC_F9,           KC_PSCR,         KC_TRNS,              KC_TRNS,           GH_TDL,          GH_QWTY,           GH_COLE,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+        KC_TRNS,          KC_F12,          KC_F7,           KC_F8,           KC_F9,           KC_PSCR,         KC_TRNS,              KC_TRNS,           GH_TDL,    PDF(BASE_QWERTY), PDF(BASE_COLEMAK_DH),           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
         KC_TRNS,          KC_F11,          KC_F4,           KC_F5,           KC_F6,           KC_SCRL,         KC_TRNS,              KC_TRNS,           TG(FPS),         KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
@@ -190,6 +195,45 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
     return state;
 }
+
+bool          gIsQwerty = true;
+layer_state_t default_layer_state_set_user(layer_state_t state) {
+    if (layer_state_cmp(state, BASE_COLEMAK_DH)) {
+        gIsQwerty = false;
+    } else if (layer_state_cmp(state, BASE_QWERTY)) {
+        gIsQwerty = true;
+    }
+
+    return state;
+}
+
+// Split keyboard data sync so we can send the qwerty state to the other side
+
+typedef struct _master_to_slave_t {
+    bool is_using_qwerty;
+} master_to_slave_t;
+
+void user_sync_a_slave_handler(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data) {
+    const master_to_slave_t *m2s = (const master_to_slave_t *)in_data;
+
+    // Update current layer state based on information from main half
+    gIsQwerty = m2s->is_using_qwerty;
+}
+
+void housekeeping_task_user(void) {
+    if (is_keyboard_master()) {
+        // Sync with main every second
+        static bool last_sent_qwerty = true;
+        if (gIsQwerty != last_sent_qwerty) {
+            master_to_slave_t m2s = {gIsQwerty};
+            if (transaction_rpc_send(USER_SYNC_A, sizeof(m2s), &m2s)) {
+                last_sent_qwerty = gIsQwerty;
+            }
+        }
+    }
+}
+
+// Keyboard lighting
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t layer = get_highest_layer(layer_state);
     for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
@@ -202,11 +246,12 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 } else if (index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
                     switch (layer) {
                         case BASE_QWERTY:
-                            rgb_matrix_set_color(index, RGB_BLUE);
-                            break;
-
                         case BASE_COLEMAK_DH:
-                            rgb_matrix_set_color(index, RGB_PURPLE);
+                            if (gIsQwerty) {
+                                rgb_matrix_set_color(index, RGB_BLUE);
+                            } else {
+                                rgb_matrix_set_color(index, RGB_PURPLE);
+                            }
                             break;
 
                         case FPS:
@@ -260,6 +305,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
 // Initialize the keyboard to be rgb blue
 void keyboard_post_init_user(void) {
+    transaction_register_rpc(USER_SYNC_A, user_sync_a_slave_handler);
     // rgb_matrix_sethsv(170, 255, 255);
     // rgb_matrix_mode(RGB_MATRIX_SOLID_REACTIVE);
 

@@ -7,5 +7,8 @@ VPATH += keyboards/gboards
 RGBLIGHT_ENABLE = no
 RGB_MATRIX_ENABLE = yes
 
+SPLIT_KEYBOARD = yes
+#SPLIT_TRANSPORT = custom
+
 # Debug
 #CONSOLE_ENABLE = yes

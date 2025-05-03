@@ -28,19 +28,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
 #define CHORDAL_HOLD
-#define COMBO_TERM 40
+#define COMBO_TERM 30
 
 #define MASTER_LEFT
 
 // Tri-layer setup for system layer
-#define TRI_LAYER_LOWER_LAYER 3
-#define TRI_LAYER_UPPER_LAYER 7
-#define TRI_LAYER_ADJUST_LAYER 8
+#define TRI_LAYER_LOWER_LAYER 4
+#define TRI_LAYER_UPPER_LAYER 8
+#define TRI_LAYER_ADJUST_LAYER 9
 
 // RGB
+#define SPLIT_TRANSPORT_MIRROR
 #define SPLIT_LAYER_STATE_ENABLE
 #define SPLIT_LED_STATE_ENABLE
 #define SPLIT_MODS_ENABLE
+#define SPLIT_TRANSACTION_IDS_USER USER_SYNC_A
 //  #define SPLIT_OLED_ENABLE
 
 #ifdef RGB_MATRIX_ENABLE
