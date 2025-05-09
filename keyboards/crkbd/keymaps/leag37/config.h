@@ -25,10 +25,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define QUICK_TAP_TERM 175
 // #define QUICK_TAP_TERM_PER_KEY
 #define TAPPING_TERM 250
-#define PERMISSIVE_HOLD
-#define PERMISSIVE_HOLD_PER_KEY
+// #define PERMISSIVE_HOLD
+// #define PERMISSIVE_HOLD_PER_KEY
+#define HOLD_ON_OTHER_KEY_PRESS
+// #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define CHORDAL_HOLD
 #define COMBO_TERM 30
+#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
 
 #define MASTER_LEFT
 

@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include "config.h"
 #include "print.h"
 #include <inttypes.h>
 
@@ -73,9 +74,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
         KC_TRNS,          KC_PAST,         KC_7,            KC_8,            KC_9,            KC_PLUS,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_TRNS,          KC_0,            KC_4,            KC_5,            KC_6,            KC_PEQL,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+        KC_TRNS,          KC_0,            KC_4,            KC_5,            KC_6,            KC_EQL,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-        KC_TRNS,          KC_PSLS,         KC_1,            KC_2,            KC_3,            KC_PMNS,                                              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+        KC_TRNS,          KC_PSLS,         KC_1,            KC_2,            KC_3,            KC_MINUS,                                              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
                                                                            KC_TAB,          KC_ESC,          KC_SPC,             KC_TRNS,           KC_TRNS,           KC_TRNS
                                                                       //'----------------------------------------------------'  '----------------------------------------------------'
@@ -104,11 +105,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 [SYMBOL] = LAYOUT_split_3x6_3_ex2(
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-       KC_TRNS,           KC_GRV,          KC_AMPR,         KC_ASTR,         KC_LPRN,         KC_PLUS,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+       KC_TRNS,           KC_GRV,          KC_AMPR,         KC_ASTR,         S(KC_GRV),         KC_PLUS,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-       KC_TRNS,           KC_QUES,         KC_DLR,          KC_PERC,         KC_CIRC,         KC_PEQL,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+       KC_TRNS,           KC_QUES,         KC_DLR,          KC_PERC,         KC_CIRC,         KC_EQUAL,         KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-       KC_TRNS,           KC_PSLS,         KC_EXLM,         KC_AT,           KC_HASH,         KC_PMNS,                                              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+       KC_TRNS,           KC_PSLS,         KC_EXLM,         KC_AT,           KC_HASH,         KC_MINUS,                                              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
                                                                            KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS
                                                                       //'----------------------------------------------------'  '----------------------------------------------------'
@@ -117,9 +118,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
        KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           MS_LEFT,         MS_DOWN,         MS_UP,           MS_RGHT,         KC_TRNS,           KC_TRNS,
+       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,          KC_TRNS,              KC_TRNS,           MS_LEFT,         MS_DOWN,         MS_UP,           MS_RGHT,         KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,                                                MS_WHLL,         MS_WHLD,         MS_WHLU,         MS_WHLR,         KC_TRNS,           KC_TRNS,
+       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,                                    MS_WHLL,         MS_WHLD,         MS_WHLU,         MS_WHLR,         KC_TRNS,           KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
                                                                            KC_TRNS,           KC_TRNS,           KC_TRNS,              MS_BTN1,         MS_BTN2,         MS_BTN3
                                                                       //'----------------------------------------------------'  '----------------------------------------------------'
@@ -176,7 +177,7 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
         'L', 'L', 'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R', 'R', 'R',
         'L', 'L', 'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R', 'R', 'R',
         'L', 'L', 'L', 'L', 'L', 'L',            'R', 'R', 'R', 'R', 'R', 'R',
-                            'L', 'L', 'L',  'R', 'R', 'R'
+                            '*', '*', '*',  '*', '*', '*'
     );
 // clang-format on
 
@@ -196,7 +197,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-bool          gIsQwerty = true;
+bool          gIsQwerty   = true;
+bool          gIsCapsWord = false;
 layer_state_t default_layer_state_set_user(layer_state_t state) {
     if (layer_state_cmp(state, BASE_COLEMAK_DH)) {
         gIsQwerty = false;
@@ -211,25 +213,50 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 
 typedef struct _master_to_slave_t {
     bool is_using_qwerty;
+    bool is_caps_word;
 } master_to_slave_t;
 
 void user_sync_a_slave_handler(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data) {
     const master_to_slave_t *m2s = (const master_to_slave_t *)in_data;
 
     // Update current layer state based on information from main half
-    gIsQwerty = m2s->is_using_qwerty;
+    gIsQwerty   = m2s->is_using_qwerty;
+    gIsCapsWord = m2s->is_caps_word;
 }
 
 void housekeeping_task_user(void) {
     if (is_keyboard_master()) {
         // Sync with main every second
         static bool last_sent_qwerty = true;
-        if (gIsQwerty != last_sent_qwerty) {
-            master_to_slave_t m2s = {gIsQwerty};
+        static bool last_sent_cw     = false;
+
+        if (gIsQwerty != last_sent_qwerty || gIsCapsWord != last_sent_cw) {
+            master_to_slave_t m2s = {gIsQwerty, gIsCapsWord};
             if (transaction_rpc_send(USER_SYNC_A, sizeof(m2s), &m2s)) {
                 last_sent_qwerty = gIsQwerty;
+                last_sent_cw     = gIsCapsWord;
             }
         }
+    }
+}
+
+void caps_word_set_user(bool active) {
+    gIsCapsWord = active;
+}
+
+bool caps_word_press_user(uint16_t keycode) {
+    switch (keycode) {
+        case KC_A ... KC_Z:
+            add_weak_mods(MOD_BIT(KC_LSFT));
+            return true;
+
+        case KC_1 ... KC_0:
+        case KC_BSPC:
+        case KC_DEL:
+        case KC_UNDS:
+            return true;
+        default:
+            return false; // deactivate caps word
     }
 }
 
@@ -241,8 +268,10 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             uint8_t index = g_led_config.matrix_co[row][col];
             if (index >= led_min && index < led_max) {
                 if (host_keyboard_led_state().caps_lock && g_led_config.flags[index] & LED_FLAG_KEYLIGHT) {
-                    // If we have caps lock enabled, highlight white for this layer
+                    // If we have caps lock enabled, highlight green for this layer
                     rgb_matrix_set_color(index, RGB_GREEN);
+                } else if (gIsCapsWord && g_led_config.flags[index] & LED_FLAG_KEYLIGHT) {
+                    rgb_matrix_set_color(index, RGB_SPRINGGREEN);
                 } else if (index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
                     switch (layer) {
                         case BASE_QWERTY:
@@ -315,6 +344,10 @@ void keyboard_post_init_user(void) {
 #endif
 }
 
+bool handle_recent_chord(uint16_t keycode, keyrecord_t *record) {
+    return true;
+}
+
 // Callback for key actions to handle custom keycodes
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -338,6 +371,66 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }
+    };
+
+    // For fast-shift, we want to force shift if we fall into non-layer-specific keys
+    if (record->event.pressed) {
+        if (layer_state_cmp(layer_state, SYMBOL) || layer_state_cmp(layer_state, MOUSE)) {
+            switch (keycode) {
+                // QWERTY
+                case LGUI_T(KC_A):
+                case LALT_T(KC_S):
+                case LCTL_T(KC_D):
+                case LSFT_T(KC_F):
+                case RSFT_T(KC_J):
+                case RCTL_T(KC_K):
+                case RALT_T(KC_L):
+                case RGUI_T(KC_QUOT):
+
+                // COLEMAK
+                // case LGUI_T(KC_A):
+                case LALT_T(KC_R):
+                case LCTL_T(KC_S):
+                case LSFT_T(KC_T):
+                case RSFT_T(KC_N):
+                case RCTL_T(KC_E):
+                case RALT_T(KC_I):
+                case RGUI_T(KC_O): {
+                    clear_weak_mods();
+                    add_weak_mods(MOD_BIT(KC_LSFT));
+                } break;
+
+                case KC_A ... KC_Z:
+                case KC_QUOT: {
+                    add_weak_mods(MOD_BIT(KC_LSFT));
+                } break;
+
+                case KC_COMM: {
+                    tap_code16(KC_SCLN);
+                    return false;
+                }
+
+                case KC_DOT: {
+                    tap_code16(KC_COLN);
+                    return false;
+                }
+
+                case KC_LPRN: {
+                    tap_code16(KC_RBRC);
+                    return false;
+                }
+
+                case KC_RPRN: {
+                    tap_code16(KC_LBRC);
+                    return false;
+                }
+
+                case KC_UNDS: {
+                    tap_code16(KC_PIPE);
+                    return false;
+                } break;
+            }
+        }
     }
 
 #ifdef CONSOLE_ENABLE
@@ -353,7 +446,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         case RSFT_T(KC_J):
         case LSFT_T(KC_T):
         case RSFT_T(KC_N):
-            return 125;
+            return 100;
 
         default:
             return TAPPING_TERM;
@@ -384,19 +477,59 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+bool get_hold_on_other_keypress(uint16_t keycode, keyrecord_t *record) {
+    return true;
+}
+
 bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record, uint16_t other_keycode, keyrecord_t *other_record) {
     switch (tap_hold_keycode) {
         // GUI keys should always resolve as taps unless the tap term elapses
         case LGUI_T(KC_A):
-        case RGUI_T(KC_QUOT):
+        case RGUI_T(KC_QUOT): {
             if (other_record->event.time - tap_hold_record->event.time < TAPPING_TERM) {
                 return false;
             }
+        } break;
+
+        // For alt and ctl modifiers, we want to wait till at least the quick tap term before registering it as a hold
+        case LALT_T(KC_S):
+        case RALT_T(KC_L): {
+            if (other_record->event.time - tap_hold_record->event.time < 100) {
+                return false;
+            }
+        } break;
+        case LCTL_T(KC_D):
+        case RCTL_T(KC_K):
+        case LSFT_T(KC_F):
+        case RSFT_T(KC_J): {
+            if (other_record->event.time - tap_hold_record->event.time < 100) {
+                return false;
+            }
+        } break;
 
         default:
             break;
     }
-    return get_chordal_hold_default(tap_hold_record, other_record);
+
+    // If we should not be a chordal hold, then return false as we don't want to do anything special
+    bool should_hold = get_chordal_hold_default(tap_hold_record, other_record);
+    if (should_hold) {
+        // However, if we happen to be a chordal hold, we want to only resolve in a press if the key event happened
+        // after a certain period of time. This simulates something similar to Required Prior Idle in ZMK
+        // require_prior_idle_ms = 80
+        if (tap_hold_record->event.pressed && other_record->event.pressed) {
+            int time_elapsed = other_record->event.time - tap_hold_record->event.time;
+            should_hold      = time_elapsed > 80;
+        } else {
+            should_hold = false;
+        }
+    }
+#ifdef CONSOLE_ENABLE
+    uprintf("Chordal Hold Keycode: kc: 0x%04X, pressed: %u, time: %5u, int: %u, \n", tap_hold_keycode, tap_hold_record->event.pressed, tap_hold_record->event.time, tap_hold_record->tap.interrupted);
+    uprintf("Chordal Hold Other  : kc: 0x%04X, pressed: %u, time: %5u, int: %u, \n", other_keycode, other_record->event.pressed, other_record->event.time, other_record->tap.interrupted);
+#endif
+
+    return should_hold;
 }
 
 #ifdef OTHER_KEYMAP_C
