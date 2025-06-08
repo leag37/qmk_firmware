@@ -116,11 +116,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    ),
 [MOUSE] = LAYOUT_split_3x6_3_ex2(
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,              KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,
+       KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,            KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------|  |----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,          KC_TRNS,              KC_TRNS,           MS_LEFT,         MS_DOWN,         MS_UP,           MS_RGHT,         KC_TRNS,           KC_TRNS,
+       KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,            KC_TRNS,         KC_TRNS,         MS_LEFT,         MS_DOWN,         MS_UP,           MS_RGHT,         KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------'  '----------------+----------------+----------------+----------------+----------------+----------------+----------------|
-       KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,           KC_TRNS,                                    MS_WHLL,         MS_WHLD,         MS_WHLU,         MS_WHLR,         KC_TRNS,           KC_TRNS,
+       KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,         KC_TRNS,                             KC_TRNS,         MS_WHLL,         MS_WHLD,         MS_WHLU,         MS_WHLR,         KC_TRNS,
     //|----------------+----------------+----------------+----------------+----------------+----------------+----------------,  ,----------------+----------------+----------------+----------------+----------------+----------------+----------------|
                                                                            KC_TRNS,           KC_TRNS,           KC_TRNS,              MS_BTN1,         MS_BTN2,         MS_BTN3
                                                                       //'----------------------------------------------------'  '----------------------------------------------------'
@@ -416,12 +416,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
 
                 case KC_LPRN: {
-                    tap_code16(KC_RBRC);
+                    tap_code16(KC_LBRC);
                     return false;
                 }
 
                 case KC_RPRN: {
-                    tap_code16(KC_LBRC);
+                    tap_code16(KC_RBRC);
                     return false;
                 }
 
@@ -486,24 +486,41 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record, u
         // GUI keys should always resolve as taps unless the tap term elapses
         case LGUI_T(KC_A):
         case RGUI_T(KC_QUOT): {
-            if (other_record->event.time - tap_hold_record->event.time < TAPPING_TERM) {
-                return false;
+            if (tap_hold_record->event.pressed && other_record->event.pressed) {
+                if (other_record->event.time - tap_hold_record->event.time < TAPPING_TERM) {
+                    return false;
+                }
             }
         } break;
 
         // For alt and ctl modifiers, we want to wait till at least the quick tap term before registering it as a hold
         case LALT_T(KC_S):
         case RALT_T(KC_L): {
-            if (other_record->event.time - tap_hold_record->event.time < 100) {
-                return false;
+            if (tap_hold_record->event.pressed && other_record->event.pressed) {
+                if (other_record->event.time - tap_hold_record->event.time < TAPPING_TERM) {
+                    return false;
+                }
             }
         } break;
         case LCTL_T(KC_D):
-        case RCTL_T(KC_K):
+        case RCTL_T(KC_K): {
+            if (tap_hold_record->event.pressed && other_record->event.pressed) {
+                int prior_idle = 150;
+                if (other_keycode == LT(SYMBOL, KC_ENT)) {
+                    prior_idle = 100;
+                }
+                if (other_record->event.time - tap_hold_record->event.time < prior_idle) {
+                    return false;
+                }
+            }
+        } break;
+
         case LSFT_T(KC_F):
         case RSFT_T(KC_J): {
-            if (other_record->event.time - tap_hold_record->event.time < 100) {
-                return false;
+            if (tap_hold_record->event.pressed && other_record->event.pressed) {
+                if (other_record->event.time - tap_hold_record->event.time < 100) {
+                    return false;
+                }
             }
         } break;
 
@@ -519,7 +536,7 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record, u
         // require_prior_idle_ms = 80
         if (tap_hold_record->event.pressed && other_record->event.pressed) {
             int time_elapsed = other_record->event.time - tap_hold_record->event.time;
-            should_hold      = time_elapsed > 80;
+            should_hold      = time_elapsed > 60;
         } else {
             should_hold = false;
         }
