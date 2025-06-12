@@ -518,7 +518,7 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record, u
         case LSFT_T(KC_F):
         case RSFT_T(KC_J): {
             if (tap_hold_record->event.pressed && other_record->event.pressed) {
-                if (other_record->event.time - tap_hold_record->event.time < 100) {
+                if (other_record->event.time - tap_hold_record->event.time < 80) {
                     return false;
                 }
             }
